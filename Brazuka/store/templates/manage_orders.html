@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load cart %}
+{% load custom_filter %}
+<form name="form_Orders" class="form-inline" action="" method="POST">
+	{% csrf_token %}
+	<div class="container">
+		<div class="border rounded p-4 m-4">
+			<p class="display-4 pl-4 ml-4">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspManage Orders - {{ tipo_consulta }} </p>
+			<hr>
+			<table class="table" border="0">
+				<tr>
+					<!--<a class="btn btn-light" href="/manage_orders/99"<span class="glyphicon glyphicon-trash"></span> All Orders </a>-->
+					<a class="btn btn-primary" href="/manage_orders/0"<span class="glyphicon glyphicon-trash"></span> New Orders </a>
+					<a> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </a>
+					<a class="btn btn-warning" href="/manage_orders/1"<span class="glyphicon glyphicon-trash"></span> In Preparation </a>
+					<a> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </a>
+					<a class="btn btn-info" href="/manage_orders/2"<span class="glyphicon glyphicon-trash"></span> Ready </a>
+					<a> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </a>
+					<a class="btn btn-success" href="/manage_orders/3"<span class="glyphicon glyphicon-trash"></span> Delivered </a>
+					<a> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </a>
+					<a class="btn btn-dark" href="/manage_orders/9"<span class="glyphicon glyphicon-trash"></span> Cancelled </a>
+					<a> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </a>
+					<a> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </a>
+				</tr>
+				<thead>
+					<tr>
+						<th>Order ID</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Quantity</th>
+						<th>Product</th>
+						<th>Delivery Date</th>
+						{% if tipo_consulta == 'Ready' or tipo_consulta == 'Delivered' %}
+							<th>Address</th>
+						{% endif %}
+						{% if tipo_consulta != 'Delivered' and tipo_consulta != 'Cancelled' %}
+							<th>Actions</th>
+						{% endif %}
+					</tr>
+				</thead>
+				{% for order in manage_orders %}
+				<tr>
+					<td>{{order.0}}</td>
+					<td>{{order.1}}</td>
+					<td>{{order.2}}</td>
+					<td>{{order.3}}</td>
+					<td>{{order.4}}</td>
+					<td>{{order.6}}</td>
+					{% if tipo_consulta == 'Ready' or tipo_consulta == 'Delivered' %}
+						<td>{{order.8}}</td>
+					{% endif %}
+
+					{% if order.7 == '0' %}
+					<!--<td><small class="badge badge-primary"> New Order </small></td>-->
+					<td><a class="btn btn-warning" type="submit" href="/manage_orders/update/{{ order.0 }}/1"> In Preparation </a></td>
+					<td><a class="btn btn-dark" type="submit" href="/manage_orders/update/{{ order.0 }}/9"> Cancel </a></td>
+					{% endif %}
+
+					{% if order.7 == '1' %}
+					<!--<td><small class="badge badge-warning"> In Preparation </small></td>-->
+					<td><a class="btn btn-info" type="submit" href="/manage_orders/update/{{ order.0 }}/2"> Ready </a></td>
+					<td><a class="btn btn-dark" type="submit" href="/manage_orders/update/{{ order.0 }}/9"> Cancel </a></td>
+					{% endif %}
+
+					{% if order.7 == '2' %}
+					<!--<td><small class="badge badge-info"> Ready </small></td>-->
+					<td><a class="btn btn-success" type="submit" href="/manage_orders/update/{{ order.0 }}/3"> Delivered </a></td>
+					<td><a class="btn btn-dark" type="submit" href="/manage_orders/update/{{ order.0 }}/9"> Cancel </a></td>
+					{% endif %}
+
+					{% if order.7 == '3' %}
+					<!--<td><small class="badge badge-success"> Delivered </small></td>-->
+					<!-- <td><a class="btn btn-dark" type="submit" href="/manage_orders/update/{{ order.0 }}/9"> Cancel </a></td>-->
+					{% endif %}
+
+					{% if order.7 == '9' %}
+					<!--<td><small class="badge badge-dark"> Cancelled </small></td>-->
+					{% endif %}
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+</form>
+{% endblock %}

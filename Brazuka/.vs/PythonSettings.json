@@ -1,0 +1,6 @@
+{
+  "SuppressEnvironmentCreationPrompt": true,
+  "SuppressPackageInstallationPrompt": true,
+  "TestFramework": "Pytest",
+  "Interpreter": "Workspace|Workspace|env_Brazuka"
+}
